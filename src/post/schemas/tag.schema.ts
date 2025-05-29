@@ -4,12 +4,12 @@ import mongoose, { HydratedDocument } from 'mongoose';
 export type PostDocument = HydratedDocument<Tag>;
 
 @Schema()
-class Tag {
+export class Tag {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: mongoose.Schema.Types.ObjectId;
 
-  @Prop()
-  tag: string;
+  @Prop({ required: true, unique: true })
+  tagName: string;
 }
 
 export const TagSchema = SchemaFactory.createForClass(Tag);
