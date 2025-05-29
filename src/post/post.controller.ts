@@ -1,4 +1,4 @@
-import { Controller, Param, Query } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { PostService } from './post.service';
 import { SavePostService } from './commands/save-post.service';
 import { MapService } from './map/map.service';
