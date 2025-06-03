@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpStatus, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 import { BaseResponse } from 'src/common/dto/base-response.dto';
 import { User } from './schema/user.schema';
@@ -14,7 +14,7 @@ export class UserController {
   ): Promise<BaseResponse<User>> {
     const user = await this.userService.createUser(crateUserDto);
     return {
-      success: true,
+      status: HttpStatus.CREATED,
       message: 'User가 성공적으로 생성됨',
       data: user,
     };

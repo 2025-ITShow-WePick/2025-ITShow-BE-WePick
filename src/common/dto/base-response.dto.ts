@@ -1,5 +1,7 @@
+import { HttpStatus } from '@nestjs/common';
+
 export class BaseResponse<T> {
-  success: boolean;
+  status: HttpStatus;
   message: string;
   data?: T;
 }
