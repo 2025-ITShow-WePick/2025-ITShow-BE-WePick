@@ -14,9 +14,9 @@ import { GetPostService } from './queries/get-post.service';
 import { MapService } from './map/map.service';
 
 // Schema
-import { Posts, PostSchema } from './schema/post.schema';
+import { Posts, PostSchema } from './schemas/post.schema';
 import { User, UserSchema } from '../user/schema/user.schema';
-import { Tag, TagSchema } from '../tag/schema/tag.schema';
+import { Tag, TagSchema } from './schemas/tag.schema';
 import { UserModule } from 'src/user/user.module';
 
 @Module({
