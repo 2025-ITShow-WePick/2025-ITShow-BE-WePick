@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import { Posts, PostDocument } from '../schema/post.schema';
+import { Posts, PostDocument } from '../schemas/post.schema';
 import { Model, Types } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreatePostDto } from 'src/post/dto/create-post.dto';
-import { Tag, TagDocument } from '../../tag/schema/tag.schema';
+import { Tag, TagDocument } from '../schemas/tag.schema';
 import { User, UserDocument } from '../../user/schema/user.schema';
 
 @Injectable()
@@ -25,16 +25,17 @@ export class SavePostService {
   // post를 db에 저장
   async savePostWithTags(createPostDto: CreatePostDto): Promise<PostDocument> {
     const tagIds: Types.ObjectId[] = [];
+    console.log(createPostDto);
 
     try {
       // 생성된 Tag 확인하고 id 저장
       for (const tag of createPostDto.tags) {
-        const existingTag = await this.postModel.findOne({ tag });
+        const existingTag = await this.tagModel.findOne({ tagName: tag });
 
         if (existingTag) {
           tagIds.push(existingTag._id);
         } else {
-          const newTag = await this.postModel.create({ tag });
+          const newTag = await this.tagModel.create({ tagName: tag });
           tagIds.push(newTag._id);
         }
       }

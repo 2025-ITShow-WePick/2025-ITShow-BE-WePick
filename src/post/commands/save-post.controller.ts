@@ -13,7 +13,7 @@ import { SavePostService } from './save-post.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreatePostDto } from 'src/post/dto/create-post.dto';
 import { BaseResponse } from 'src/common/dto/base-response.dto';
-import { Posts } from 'src/post/schema/post.schema';
+import { Posts } from 'src/post/schemas/post.schema';
 
 @Controller('post')
 export class SavePostController {
