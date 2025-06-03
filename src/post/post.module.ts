@@ -5,10 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 // Controller
 import { PostController } from './post.controller';
-import { SavePostController } from './commands/save-post.controller';
 
 // Services
-import { PostService } from './post.service';
 import { SavePostService } from './commands/save-post.service';
 import { GetPostService } from './queries/get-post.service';
 import { MapService } from './map/map.service';
@@ -28,7 +26,7 @@ import { UserModule } from 'src/user/user.module';
     ]),
     UserModule,
   ],
-  controllers: [PostController, SavePostController],
+  controllers: [PostController],
   providers: [
     {
       provide: 'S3_CLIENT',
@@ -52,7 +50,6 @@ import { UserModule } from 'src/user/user.module';
       },
       inject: [ConfigService],
     },
-    PostService,
     SavePostService,
     GetPostService,
     MapService,

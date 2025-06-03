@@ -25,7 +25,6 @@ export class SavePostService {
   // post를 db에 저장
   async savePostWithTags(createPostDto: CreatePostDto): Promise<PostDocument> {
     const tagIds: Types.ObjectId[] = [];
-    console.log(createPostDto);
 
     try {
       // 생성된 Tag 확인하고 id 저장
