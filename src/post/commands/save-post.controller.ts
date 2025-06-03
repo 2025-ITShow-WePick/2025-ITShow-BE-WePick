@@ -1,8 +1,8 @@
 import {
+  Body,
   Controller,
   FileTypeValidator,
   MaxFileSizeValidator,
-  Param,
   ParseFilePipe,
   Post,
   UploadedFile,
@@ -11,11 +11,29 @@ import {
 import { v4 as uuidv4 } from 'uuid';
 import { SavePostService } from './save-post.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreatePostDto } from 'src/post/dto/create-post.dto';
+import { BaseResponse } from 'src/common/dto/base-response.dto';
+import { Posts } from 'src/post/schema/post.schema';
 
 @Controller('post')
 export class SavePostController {
   constructor(private readonly savePostService: SavePostService) {}
 
+  // post를 db에 저장
+  @Post()
+  async savePost(
+    @Body() createPostDto: CreatePostDto,
+  ): Promise<BaseResponse<Posts>> {
+    const post = await this.savePostService.savePostWithTags(createPostDto);
+
+    return {
+      success: true,
+      message: 'DB에 Post가 성공적으로 저장됨',
+      data: post,
+    };
+  }
+
+  // aws bucket에 사진 저장
   @Post('/upload-image')
   @UseInterceptors(FileInterceptor('image'))
   async uploadImage(
@@ -28,15 +46,20 @@ export class SavePostController {
       }),
     )
     file: Express.Multer.File,
-    @Param('postId') postId: string,
-  ) {
+  ): Promise<BaseResponse<string>> {
     const ext = file.originalname.split('.').pop() as string;
-    const fileName = `uploads/${postId}/${uuidv4()}.${ext}`;
+    const fileName = `uploads/${uuidv4()}.${ext}`;
 
-    const imageUrl = await this.savePostService.saveImage(fileName, file, ext); // 이미지 url을 aws에 저장
+    const imageUrl = await this.savePostService.saveImageToS3(
+      fileName,
+      file,
+      ext,
+    ); // 이미지 url을 bucket에 저장
 
-    await this.savePostService.saveImageUrlToDb(imageUrl); // 이미지 url을 db에 저장
-
-    return { success: true, url: imageUrl };
+    return {
+      success: true,
+      message: 'bucket에 이미지 url이 성공적으로 저장됨',
+      data: imageUrl,
+    };
   }
 }
