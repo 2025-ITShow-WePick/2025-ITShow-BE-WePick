@@ -14,17 +14,19 @@ import { GetPostService } from './queries/get-post.service';
 import { MapService } from './map/map.service';
 
 // Schema
-import { Post, PostSchema } from './schemas/post.schema';
-import { User, UserSchema } from './schemas/user.schema';
-import { Tag, TagSchema } from './schemas/tag.schema';
+import { Posts, PostSchema } from './schema/post.schema';
+import { User, UserSchema } from '../user/schema/user.schema';
+import { Tag, TagSchema } from '../tag/schema/tag.schema';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      { name: Post.name, schema: PostSchema },
+      { name: Posts.name, schema: PostSchema },
       { name: User.name, schema: UserSchema },
       { name: Tag.name, schema: TagSchema },
     ]),
+    UserModule,
   ],
   controllers: [PostController, SavePostController],
   providers: [
