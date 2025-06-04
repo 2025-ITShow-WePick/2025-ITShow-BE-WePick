@@ -13,6 +13,16 @@ export class GetPostService {
     @InjectModel(Tag.name) private tagModel: Model<TagDocument>,
   ) {}
 
+  async getAllPosts() {
+    try {
+      const posts = await this.postModel.find();
+      return posts.map(postToGetPostsByTagDto);
+    } catch (err) {
+      console.log('모든 Post 조회 실패', err);
+      throw new InternalServerErrorException('Post 조회 중 오류 발생');
+    }
+  }
+
   async getPostsByTag(tags: string[]): Promise<GetPostsByTagDto[]> {
     try {
       // 하나라도 태그가 포함되면 검색되어야 하므로 $in 사용

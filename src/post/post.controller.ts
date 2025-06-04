@@ -32,17 +32,22 @@ export class PostController {
   // TODO: 각 기능 별 Service를 여기서 한번에 주입, 매핑
 
   // 전체 게시물 조회
-  // @Get('')
-  // getAllPosts() {
-  //   return this.getPostService.getAllPosts();
-  // }
+  @Get()
+  async getAllPosts() {
+    const posts = await this.getPostService.getAllPosts();
+
+    return {
+      status: HttpStatus.OK,
+      message: '모든 Post 조회 성공',
+      data: posts,
+    };
+  }
 
   // 태그 별로 게시물 조회
   @Get('tag')
   async getPostsByTag(
     @Query('tags') tags: string[],
   ): Promise<BaseResponse<GetPostsByTagDto[]>> {
-    console.log(tags);
     const posts = await this.getPostService.getPostsByTag(tags);
 
     return {
