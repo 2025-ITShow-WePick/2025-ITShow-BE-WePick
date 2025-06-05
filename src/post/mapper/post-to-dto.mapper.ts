@@ -3,6 +3,7 @@ import { PostDocument } from '../schemas/post.schema';
 
 export function postToGetPostsByTagDto(post: PostDocument): GetPostsByTagDto {
   return {
+    id: post._id.toHexString(),
     imageUrl: post.imageUrl,
     location: post.location,
     date: post.date.toString(),
