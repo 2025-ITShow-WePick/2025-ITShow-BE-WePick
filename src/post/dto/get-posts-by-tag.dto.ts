@@ -1,13 +1,16 @@
-import { IsString, IsDate } from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class GetPostsByTagDto {
+  @IsString()
+  id: string;
+
   @IsString()
   imageUrl: string;
 
   @IsString()
   location: string;
 
-  @IsDate()
+  @IsString()
   date: string;
 
   @IsString()

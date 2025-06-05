@@ -42,7 +42,6 @@ export class PostController {
   async getPostsByTag(
     @Query('tags') tags: string[],
   ): Promise<BaseResponse<GetPostsByTagDto[]>> {
-    console.log(tags);
     const posts = await this.getPostService.getPostsByTag(tags);
 
     return {
