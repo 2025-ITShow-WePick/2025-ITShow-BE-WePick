@@ -20,6 +20,8 @@ import { Posts } from './schemas/post.schema';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { v4 } from 'uuid';
 import { GetPostsByTagDto } from './dto/get-posts-by-tag.dto';
+import { Param } from '@nestjs/common';
+import { GetPostByIdDto } from './dto/get-post-by-id.dto';
 
 @Controller('post')
 export class PostController {
@@ -58,10 +60,18 @@ export class PostController {
   }
 
   // 각 게시물 조회
-  // @Get(':id')
-  // getPostById(@Param('id') id: string) {
-  //   return this.getPostService.getPostById(id);
-  // }
+  @Get(':id')
+  async getPostById(
+    @Param('id') id: string,
+  ): Promise<BaseResponse<GetPostByIdDto>> {
+    const post = await this.getPostService.getPostById(id);
+
+    return {
+      status: HttpStatus.OK,
+      message: 'Post 개별 조회 성공',
+      data: post,
+    };
+  }
 
   // 게시물 저장 (map 위치 포함)
   @Post()

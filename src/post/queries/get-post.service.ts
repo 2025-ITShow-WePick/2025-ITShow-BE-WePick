@@ -4,7 +4,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Tag, TagDocument } from '../schemas/tag.schema';
 import { postToGetPostsByTagDto } from '../mapper/post-to-dto.mapper';
+import { postToGetPostByIdDto } from '../mapper/post-to-dto.mapper';
 import { GetPostsByTagDto } from '../dto/get-posts-by-tag.dto';
+import { GetPostByIdDto } from '../dto/get-post-by-id.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class GetPostService {
@@ -35,6 +38,22 @@ export class GetPostService {
       return posts.map(postToGetPostsByTagDto);
     } catch (err) {
       console.log('태그 별 Post 조회 실패', err);
+      throw new InternalServerErrorException('Post 조회 중 오류 발생');
+    }
+  }
+
+  async getPostById(id: string): Promise<GetPostByIdDto> {
+    try {
+      // id로 특정 Post를 검색
+      const post = await this.postModel.findById(id);
+
+      if (!post) {
+        throw new NotFoundException('해당 게시물을 찾을 수 없습니다.');
+      }
+
+      return postToGetPostByIdDto(post);
+    } catch (err) {
+      console.log('게시물 별 Post 조회 실패', err);
       throw new InternalServerErrorException('Post 조회 중 오류 발생');
     }
   }
